@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -7,10 +8,16 @@ import { Video, Mic, Volume2, HandMetal } from "lucide-react"
 import { useRouter } from "next/navigation"
 import Logo from "../../../public/gnec_logo.png"
 import Image from "next/image"
-
+import ASLRecognition from "@/components/ASLRecognition"
 
 export default function SignLanguagePage() {
   const router = useRouter();
+  const [translation, setTranslation] = useState<string>("");
+  
+  const handleTranslationUpdate = (newTranslation: string) => {
+    setTranslation(newTranslation);
+  };
+  
   return (
     <div className="flex flex-col min-h-screen text-center items-center">
       <main className="flex-1">
@@ -46,25 +53,22 @@ export default function SignLanguagePage() {
                   <CardContent>
                     <div className="grid gap-6 lg:grid-cols-2">
                       <div className="space-y-4">
-                        <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center">
-                          <div className="text-center p-8 md:p-16">
-                            <Video className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                            <p className="text-gray-500">Camera feed would appear here</p>
-                            <p className="text-xs text-gray-400 mt-2">Camera access required for live translation</p>
-                          </div>
-                        </div>
-                        <div className="flex justify-center gap-4">
-                          <Button className="bg-teal-600 hover:bg-teal-700 cursor-pointer">Start Camera</Button>
-                          <Button variant="outline" className="cursor-pointer">Pause</Button>
-                        </div>
+                        <ASLRecognition onTranslationUpdate={handleTranslationUpdate} />
                       </div>
                       <div className="space-y-4">
                         <div className="bg-gray-50 rounded-lg p-4 h-full min-h-[200px]">
-                          <p className="font-medium text-sm text-gray-700 mb-2">Translation:</p>
+                          <p className="font-medium text-sm text-gray-700 mb-2">Full Translation:</p>
                           <div className="space-y-2">
-                            <p className="text-gray-900">"Hello, my name is [Name]."</p>
-                            <p className="text-gray-900">"I am interested in the position."</p>
-                            <p className="text-gray-900">"I have experience in this field."</p>
+                            {translation ? (
+                              <p className="text-gray-900">{translation}</p>
+                            ) : (
+                              <>
+                                <p className="text-gray-500 italic">Start signing to see translation here</p>
+                                <p className="text-gray-900 hidden">"Hello, my name is [Name]."</p>
+                                <p className="text-gray-900 hidden">"I am interested in the position."</p>
+                                <p className="text-gray-900 hidden">"I have experience in this field."</p>
+                              </>
+                            )}
                           </div>
                         </div>
                       </div>
