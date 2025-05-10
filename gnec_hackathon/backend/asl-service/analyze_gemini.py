@@ -18,7 +18,7 @@ except Exception as e:
 # Configure the API key (either from .env or from environment variables set in run.py)
 api_key = os.environ.get("GEMINI_API_KEY")
 
-if not api_key or api_key == "AIzaSyCyu49QtPO7YJNnq7c7egJ0FvS2TQpBezA":
+if not api_key:
     logger.warning("No valid Gemini API key found. Gemini analysis will not work.")
     logger.warning("Please set a valid GEMINI_API_KEY in your environment or .env file")
 else:
