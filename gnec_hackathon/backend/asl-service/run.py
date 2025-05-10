@@ -6,24 +6,43 @@ import subprocess
 import sys
 import uvicorn
 import logging
+from dotenv import load_dotenv
 
 # Setup logging
 logging.basicConfig(level=logging.INFO,
                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-# Set environment variables directly
-os.environ["PORT"] = "8000"
-os.environ["CORS_ORIGINS"] = "http://localhost:3000"
-os.environ["MODEL_SAVE_DIR"] = "../../../gnec_hackathon/ai/models"
-os.environ["PREDICTION_THRESHOLD"] = "0.7"
-os.environ["SEQUENCE_LENGTH"] = "10"
-os.environ["STABLE_THRESHOLD"] = "8"
-os.environ["REQUIRED_HOLD_TIME"] = "0.0"
-os.environ["COOLDOWN_TIME"] = "1.5"
+# Load environment variables from .env file if it exists
+try:
+    load_dotenv()
+    logger.info("Loaded environment variables from .env file")
+except Exception as e:
+    logger.warning(f"Could not load .env file: {e}")
 
-# Add a placeholder Gemini API key - replace this with your actual key
-os.environ["GEMINI_API_KEY"] = "YOUR_GEMINI_API_KEY_HERE"
+# Set default environment variables if not already set
+if not os.environ.get("PORT"):
+    os.environ["PORT"] = "8000"
+if not os.environ.get("CORS_ORIGINS"):
+    os.environ["CORS_ORIGINS"] = "http://localhost:3000"
+if not os.environ.get("MODEL_SAVE_DIR"):
+    os.environ["MODEL_SAVE_DIR"] = "../../../gnec_hackathon/ai/models"
+if not os.environ.get("PREDICTION_THRESHOLD"):
+    os.environ["PREDICTION_THRESHOLD"] = "0.7"
+if not os.environ.get("SEQUENCE_LENGTH"):
+    os.environ["SEQUENCE_LENGTH"] = "10"
+if not os.environ.get("STABLE_THRESHOLD"):
+    os.environ["STABLE_THRESHOLD"] = "8"
+if not os.environ.get("REQUIRED_HOLD_TIME"):
+    os.environ["REQUIRED_HOLD_TIME"] = "0.0"
+if not os.environ.get("COOLDOWN_TIME"):
+    os.environ["COOLDOWN_TIME"] = "1.5"
+
+# Check if Gemini API key is set, warn if not found
+if not os.environ.get("GEMINI_API_KEY"):
+    logger.warning("GEMINI_API_KEY not found in environment or .env file")
+    logger.warning("Sentence analysis functionality will not work properly")
+    logger.warning("Please set a valid GEMINI_API_KEY in your .env file")
 
 def check_dependencies():
     """Check if all required dependencies are installed."""
