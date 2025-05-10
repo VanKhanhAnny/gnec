@@ -9,6 +9,7 @@ export const JobSearch = () => {
   const [remote, setRemote] = useState<boolean>(false);
   const [countries, setCountries] = useState<string[]>(['US']); // Default to US
   const [datePosted, setDatePosted] = useState<number>(30); // Default to last 30 days
+  const [keywords, setKeywords] = useState<string>(''); // New state for keywords
   
   const [jobs, setJobs] = useState<JobSearchResult[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -56,6 +57,13 @@ export const JobSearch = () => {
     );
   };
   
+  // Handle Enter key press in the keywords input
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+  
   const handleSearch = async () => {
     try {
       setLoading(true);
@@ -71,6 +79,7 @@ export const JobSearch = () => {
         remote,
         countries: searchCountries,
         datePosted,
+        keywords: keywords.trim() || undefined, // Add keywords parameter
       };
       
       console.log('Searching with params:', params);
@@ -105,6 +114,36 @@ export const JobSearch = () => {
   return (
     <div className="bg-white rounded-lg shadow p-6 max-w-4xl mx-auto">
       <h2 className="text-2xl font-bold mb-6">Find Jobs</h2>
+      
+      {/* Keyword Search */}
+      <div className="mb-6">
+        <label htmlFor="keywords" className="block text-lg font-semibold mb-2">
+          Search Keywords
+        </label>
+        <div className="relative">
+          <input
+            id="keywords"
+            type="text"
+            value={keywords}
+            onChange={(e) => setKeywords(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Enter job title, skills or keywords"
+            className="w-full p-3 border rounded focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+          />
+          <button 
+            onClick={handleSearch}
+            className="absolute right-3 top-3 text-indigo-600 hover:text-indigo-800"
+            disabled={loading}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </button>
+        </div>
+        <p className="text-sm text-gray-500 mt-1">
+          Search for specific skills, job titles, or any keywords in job descriptions
+        </p>
+      </div>
       
       {/* Search filters */}
       <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-6">

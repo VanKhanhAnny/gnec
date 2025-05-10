@@ -9,6 +9,7 @@ export interface JobSearchParams {
   remote?: boolean;
   countries?: string[];
   datePosted?: number;
+  keywords?: string;
 }
 
 export interface JobSearchResult {
@@ -54,6 +55,11 @@ export const searchJobs = async (
     
     if (params.datePosted !== undefined) {
       queryParams.append('datePosted', params.datePosted.toString());
+    }
+    
+    // Add keywords parameter if present
+    if (params.keywords) {
+      queryParams.append('keywords', params.keywords);
     }
     
     const queryString = queryParams.toString();
