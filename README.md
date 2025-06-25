@@ -2,6 +2,9 @@
 
 GNEC is a comprehensive platform that combines modern web technologies with AI-powered sign language recognition to create an accessible communication solution.
 
+## Demo Video: https://youtu.be/U0MrKaeijw4
+## ML Repo: https://github.com/hoangnam310/ASL_Classification
+
 ## Project Structure
 
 The project consists of three main components:
